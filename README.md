@@ -23,6 +23,9 @@ reset timer is restarted.
 In the closed and half-open states, a count of the number of concurrent requests is maintained. This
 number rises above the configured maximum then the breaker will trip into the open state.
 
+This implementation has run in a high volume production real time bidding environment for over a
+year and has no currently known bugs.
+
 [![Build Status](https://travis-ci.org/iand/circuit.svg?branch=master)](https://travis-ci.org/iand/circuit)
 
 ## Installation
