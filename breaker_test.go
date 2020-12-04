@@ -36,25 +36,6 @@ func blockingAction(wg *sync.WaitGroup, quit chan struct{}) func() error {
 	}
 }
 
-// simpleContext is an implementation of context that acts as though
-// the context is cancelled when the err field is non-nil
-type simpleContext struct {
-	err error
-}
-
-func (s simpleContext) Done() <-chan struct{} {
-	if s.err == nil {
-		return nil
-	}
-	ch := make(chan struct{}, 1)
-	ch <- struct{}{}
-	return ch
-}
-
-func (s simpleContext) Err() error {
-	return s.err
-}
-
 func TestBreakerClosed(t *testing.T) {
 	b := &Breaker{}
 
@@ -65,7 +46,6 @@ func TestBreakerClosed(t *testing.T) {
 	}
 
 	err := b.Do(context.Background(), action)
-
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -73,7 +53,6 @@ func TestBreakerClosed(t *testing.T) {
 	if !done {
 		t.Errorf("action not executed, wanted it to be executed")
 	}
-
 }
 
 func TestBreakerOpen(t *testing.T) {
@@ -95,7 +74,6 @@ func TestBreakerOpen(t *testing.T) {
 	if done {
 		t.Errorf("action executed, wanted it not to be executed")
 	}
-
 }
 
 func TestBreakerHalfOpenFirstRequest(t *testing.T) {
@@ -109,7 +87,6 @@ func TestBreakerHalfOpenFirstRequest(t *testing.T) {
 
 	b.reset()
 	err := b.Do(context.Background(), action)
-
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -212,7 +189,6 @@ func TestBreakerFailuresMustBeConsecutive(t *testing.T) {
 	if !b.IsClosed() {
 		t.Fatalf("breaker was not in closed state")
 	}
-
 }
 
 func TestBreakerOpenWithConcurrent(t *testing.T) {
@@ -285,5 +261,4 @@ func TestBreakerContextCanceled(t *testing.T) {
 	if err := b.Do(ctx, successfulAction()); err != ctx.Err() {
 		t.Fatalf("unexpected error: %v", err)
 	}
-
 }
