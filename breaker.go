@@ -52,6 +52,11 @@ type Breaker struct {
 	// is nil then it will be ignored.
 	OnClose func()
 
+	// OnReset is a function that will be called just before the circuit breaker enters the
+	// half-open state. This will be before any trial calls are made. If it is nil then it
+	// will be ignored.
+	OnReset func()
+
 	// mu ensures only one state transition can occur at a time
 	mu     sync.Mutex
 	initer sync.Once
@@ -217,6 +222,9 @@ func (b *Breaker) reset() {
 	defer b.mu.Unlock()
 	if atomic.LoadUint32(&b.state) == halfopen {
 		return
+	}
+	if b.OnReset != nil {
+		b.OnReset()
 	}
 	atomic.StoreUint32(&b.state, halfopen)
 	atomic.StoreUint32(&b.failures, 0)

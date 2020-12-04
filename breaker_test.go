@@ -262,3 +262,43 @@ func TestBreakerContextCanceled(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
+
+func TestBreakerOnResetCalledBeforeHalfOpenState(t *testing.T) {
+	b := &Breaker{
+		Threshold:    2,
+		ResetTimeout: 20 * time.Millisecond,
+	}
+
+	onResetCalled := false
+
+	b.OnReset = func() {
+		onResetCalled = true
+	}
+
+	if !b.IsClosed() {
+		t.Fatalf("breaker was not in closed state")
+	}
+
+	b.Do(context.Background(), failingAction())
+	b.Do(context.Background(), failingAction())
+
+	if !b.IsOpen() {
+		t.Fatalf("breaker was not in open state")
+	}
+
+	time.Sleep(20 * time.Millisecond)
+	if !b.IsHalfOpen() {
+		time.Sleep(20 * time.Millisecond)
+	}
+
+	if !b.IsHalfOpen() {
+		t.Fatalf("breaker was not in half-open state")
+	}
+
+	b.Do(context.Background(), func() error {
+		if !onResetCalled {
+			t.Errorf("expected OnReset to have been called")
+		}
+		return nil
+	})
+}
