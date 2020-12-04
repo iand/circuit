@@ -81,15 +81,26 @@ const (
 	defaultResetTimeout time.Duration = 10 * time.Second
 )
 
-var ErrCircuitOpen = errors.New("circuit is open")
-var ErrTooManyConcurrent = errors.New("too many concurrent requests")
+var (
+	// ErrCircuitOpen is returned when a request is made while the circuit is open
+	ErrCircuitOpen = errors.New("circuit is open")
 
+	// ErrTooManyConcurrent is returned when a request would exceed the concurrency level of the breaker.
+	ErrTooManyConcurrent = errors.New("too many concurrent requests")
+)
+
+// An OpenReason indicates why the circuit breaker opened.
 type OpenReason int
 
 const (
-	OpenReasonThreshold   OpenReason = 0 // circuit opened because failure threshold reached
-	OpenReasonConcurrency OpenReason = 1 // circuit opened because concurrency limit reached
-	OpenReasonTrial       OpenReason = 2 // circuit opened because trial request failed
+	// OpenReasonThreshold means the circuit opened because the failure threshold was reached
+	OpenReasonThreshold OpenReason = 0 //
+
+	// OpenReasonThreshold means the circuit opened because the concurrency limit was reached
+	OpenReasonConcurrency OpenReason = 1
+
+	// OpenReasonThreshold means the circuit opened because the trial request failed
+	OpenReasonTrial OpenReason = 2
 )
 
 // Do attempts to execute the supplied function. If the function is executed
@@ -154,7 +165,6 @@ func (b *Breaker) Do(ctx context.Context, fn func() error) error {
 	default:
 		panic("unreachable")
 	}
-
 }
 
 func (b *Breaker) attempt(fn func() error) error {
