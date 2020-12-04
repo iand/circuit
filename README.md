@@ -26,7 +26,8 @@ number rises above the configured maximum then the breaker will trip into the op
 This implementation has run in a high volume production real time bidding environment for over a
 year and has no currently known bugs.
 
-[![Build Status](https://travis-ci.org/iand/circuit.svg?branch=master)](https://travis-ci.org/iand/circuit)
+[![Go Report Card](https://goreportcard.com/badge/github.com/iand/circuit)](https://goreportcard.com/report/github.com/iand/circuit)
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/iand/circuit)
 
 ## Installation
 
@@ -34,7 +35,7 @@ Simply run
 
 	go get -u github.com/iand/circuit
 
-Documentation is at [http://godoc.org/github.com/iand/circuit](http://godoc.org/github.com/iand/circuit)
+Documentation is at [https://pkg.go.dev/github.com/iand/circuit](https://pkg.go.dev/github.com/iand/circuit)
 
 ## Author
 
