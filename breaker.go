@@ -96,10 +96,10 @@ const (
 	// OpenReasonThreshold means the circuit opened because the failure threshold was reached
 	OpenReasonThreshold OpenReason = 0 //
 
-	// OpenReasonThreshold means the circuit opened because the concurrency limit was reached
+	// OpenReasonConcurrency means the circuit opened because the concurrency limit was reached
 	OpenReasonConcurrency OpenReason = 1
 
-	// OpenReasonThreshold means the circuit opened because the trial request failed
+	// OpenReasonTrial means the circuit opened because the trial request failed
 	OpenReasonTrial OpenReason = 2
 )
 
