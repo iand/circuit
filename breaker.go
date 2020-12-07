@@ -70,6 +70,9 @@ type Breaker struct {
 	// handles limit the number of concurrent requests
 	handles chan struct{}
 
+	// A count of current in-flight requests
+	inflight uint32
+
 	// Keeps track of whether the circuit has trialed a request in the half-open state
 	attemptedTrial uint32
 }
@@ -178,9 +181,11 @@ func (b *Breaker) attempt(fn func() error) error {
 	default:
 		return ErrTooManyConcurrent
 	}
+	atomic.AddUint32(&b.inflight, 1)
 
 	defer func() {
 		b.handles <- struct{}{}
+		atomic.AddUint32(&b.inflight, ^uint32(0))
 	}()
 
 	return fn()
@@ -266,4 +271,9 @@ func (b *Breaker) IsOpen() bool {
 // IsHalfOpen reports whether the circuit breaker is in the half-open state
 func (b *Breaker) IsHalfOpen() bool {
 	return atomic.LoadUint32(&b.state) == halfopen
+}
+
+// Inflight returns the number of requests currently in flight
+func (b *Breaker) Inflight() uint32 {
+	return atomic.LoadUint32(&b.inflight)
 }
