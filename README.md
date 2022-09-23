@@ -3,6 +3,13 @@
 Go package providing an implementation of the circuit-breaker pattern as described by [Martin
 Fowler](https://martinfowler.com/bliki/CircuitBreaker.html)
 
+
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/iand/circuit)
+[![Check Status](https://github.com/iand/circuit/actions/workflows/check.yml/badge.svg)](https://github.com/iand/circuit/actions/workflows/check.yml)
+[![Test Status](https://github.com/iand/circuit/actions/workflows/test.yml/badge.svg)](https://github.com/iand/circuit/actions/workflows/test.yml)
+
+## Overview
+
 The circuit breaker can be in one of three states: closed (requests will be executed normally), open
 (requests will be rejected immediately) or half-open (a single request will be used to determine
 whether to move to the open or closed states)
@@ -25,9 +32,6 @@ number rises above the configured maximum then the breaker will trip into the op
 
 This implementation has run in a high volume production real time bidding environment for over a
 year and has no currently known bugs.
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/iand/circuit)](https://goreportcard.com/report/github.com/iand/circuit)
-[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/iand/circuit)
 
 ## Installation
 
