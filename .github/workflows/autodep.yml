@@ -1,9 +1,8 @@
 env:
   GO_VERSION: 1.20
-
 on:
   workflow_dispatch:
-
+name: Update package dependencies
 jobs:
   dep_update:
     runs-on: ubuntu-latest
